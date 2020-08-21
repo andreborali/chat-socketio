@@ -1,0 +1,32 @@
+{
+  "name": "socketio-server",
+  "version": "1.0.0",
+  "description": "Socket.io Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:andreborali/chat-socketio.git"
+  },
+  "keywords": [
+    "nodejs",
+    "socketio",
+    "socket.io"
+  ],
+  "author": "Andre Borali",
+  "license": "MIT",
+  "homepage": "https://github.com/andreborali/chat-socketio#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.0.4",
+    "@types/express": "^4.17.7",
+    "@types/socket.io": "^2.1.11"
+  }
+}
