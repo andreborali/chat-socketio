@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunicador através de Socket.io</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <form id="chat">
+        <input type="text" name="username" placeholder="Digite seu usuário">
+        <div class="messages"></div>
+        <input type="text" name="message" placeholder="Digite sua mensagem">
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script type="text/javascript">
+        var domainServer = window.location.origin;
+
+        // inicia comunicação com o próprio servidor
+        var socket = io(domainServer);
+
+        // renderiza a mensagem no box de mensagens
+        function renderMessage(message)
+        {
+            $('.messages').append(`<div class="message"><strong>${message.author}</strong>: ${message.message}</div>`);
+        }
+
+        // renderiza todas mensagens recebidas (no início da conexão)
+        socket.on('previusMessage', function (messages) {
+            messages.map(function (message) {
+                renderMessage(message);
+            })
+        })
+
+        // ouvindo evento 'receivedMessage' -> novas mensagem
+        socket.on('receivedMessage', function (message) {
+            renderMessage(message);
+        })
+
+        // evento de click do botão submit
+        $('#chat').submit(function(event) {
+            // não recarrega a tela
+            event.preventDefault();
+
+            // captura informações do formulário
+            var author = $('input[name=username]').val();
+            var message = $('input[name=message]').val();
+
+            // verifica se existe alguma informação (validação simples, tamanho > 0)
+            if( author.length && message.length )
+            {
+                // configura um objeto com os dados
+                var messageObject = {
+                    author: author,
+                    message: message
+                };
+
+                // renderiza na própria tela a própria mensagem enviada
+                renderMessage(messageObject);
+
+                // envia por socket o objeto no evento "sendMessage"
+                socket.emit('sendMessage', messageObject);
+
+                // limpando campo de mensagem
+                $('input[name=message]').val('');
+            }
+        })
+    </script>
+</body>
+</html>
